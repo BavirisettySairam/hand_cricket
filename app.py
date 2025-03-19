@@ -185,16 +185,17 @@ def main():
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        webrtc_streamer(
-            key="hand-cricket",
-            video_processor_factory=VideoProcessor,
-            frontend_rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            },
-            server_rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            }
-        )
+        try:
+            webrtc_streamer(
+                key="hand-cricket",
+                video_processor_factory=VideoProcessor,
+                rtc_configuration={
+                    "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+                }
+            )
+        except Exception as e:
+            st.error(f"Error initializing video stream: {str(e)}")
+            st.info("Please make sure your camera is connected and you have granted camera permissions.")
 
     with col2:
         if st.session_state.game.game_state == "registration":
